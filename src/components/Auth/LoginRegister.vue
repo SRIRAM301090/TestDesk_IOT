@@ -43,9 +43,9 @@
       </div>
     </q-form>
 
-    <p class="text-center q-mt-md">or</p>
+    <p class="text-center q-mt-md" v-if="!this.$q.platform.is.electron">or</p>
 
-    <div class="text-center">
+    <div class="text-center" v-if="!this.$q.platform.is.electron">
       <q-btn
         style="width: 200px"
         color="negative"
