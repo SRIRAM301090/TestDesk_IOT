@@ -2,7 +2,7 @@ const net = require("net");
 const buf = new Buffer.alloc(4);
 const client = new net.Socket();
 
-export function connectTCPClient({ commit, dispatch }) {
+export function tcpClientOpen({ commit, dispatch }) {
   // connect to client
   client.connect(1338, () => {
     commit("setTcpClientStatus", true);

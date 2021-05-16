@@ -10,7 +10,7 @@
           class="q-mr-sm"
           icon="check"
           label="Reconnect"
-          @click="connectTCPClient"
+          @click="tcpClientOpen"
         />
         <q-btn
           color="primary"
@@ -36,7 +36,7 @@
           class="q-mr-sm"
           icon="check"
           label="Upload"
-          @click="upload(model)"
+          @click="uploadFile"
         />
       </div>
     </div>
@@ -56,17 +56,19 @@ export default {
   },
   methods: {
     ...mapActions("tcp", [
-      "connectTCPClient",
+      "tcpClientOpen",
       "tcpClientWrite",
-      "tcpClientClose"
+      "tcpClientClose",
+      "createServer"
     ]),
     ...mapActions("database", ["getCommand", "upload"]),
+    ...mapActions("results", ["uploadFile"])
   },
   computed: {
     ...mapGetters("tcp", ["tcpClientStatus"])
   },
   mounted() {
-    this.connectTCPClient();
+    this.tcpClientOpen();
     this.getCommand();
     this.createServer();
   }

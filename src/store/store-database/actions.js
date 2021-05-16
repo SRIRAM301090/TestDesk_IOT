@@ -1,4 +1,4 @@
-import { firebaseRealTimeDB, storageBucket } from "boot/firebase";
+import { firebaseRealTimeDB} from "boot/firebase";
 
 const userTask = firebaseRealTimeDB
   .ref(`bench/CHE7-L26526`)

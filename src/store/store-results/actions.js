@@ -1,4 +1,4 @@
-import { storageBucket } from "boot/firebase";
+import { storageBucket, firebaseFireStore } from "boot/firebase";
 
 const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
   const byteCharacters = atob(b64Data);
@@ -20,22 +20,26 @@ const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
   return blob;
 };
 
-export async function upload({}, payload) {
-
+export async function uploadFile({ dispatch }, payload) {
   const fs = require("fs").promises;
-  const b64Data = await fs.readFile("C:\\Users\\sgopala2\\Desktop\\Report.html", {
-    encoding: "base64"
-  });
+  const b64Data = await fs.readFile(
+    "C:\\Users\\sgopala2\\Desktop\\Report.html",
+    {
+      encoding: "base64"
+    }
+  );
 
-  const blob = b64toBlob(b64Data, 'text/html');
-
+  const blob = b64toBlob(b64Data, "text/html");
   const testref = storageBucket.ref("image");
+
   testref.put(blob).then(snapshot => {
-    console.log("Uploaded a blob or file!");
-    console.log(
-      snapshot.ref.getDownloadURL().then(function(downloadURL) {
-        console.log("File available at", downloadURL);
-      })
-    );
+    snapshot.ref.getDownloadURL().then(downloadURL => {
+      dispatch("addResult", downloadURL);
+    });
   });
+}
+
+export function addResult({}, payload) {
+  console.log("result added", payload);
+  firebaseFireStore.collection("repots").add({ date: Date.now() });
 }
