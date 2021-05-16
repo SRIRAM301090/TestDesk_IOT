@@ -5,6 +5,7 @@ import auth from "./store-auth";
 import tcp from "./store-tcp";
 import database from "./store-database";
 import results from "./store-results";
+import testCase from "./store-testcase";
 
 Vue.use(Vuex);
 
@@ -23,7 +24,8 @@ export default function(/* { ssrContext } */) {
       auth,
       tcp,
       database,
-      results
+      results,
+      testCase
     },
 
     // enable strict mode (adds overhead!)

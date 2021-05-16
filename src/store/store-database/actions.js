@@ -14,6 +14,12 @@ export function getCommand({ dispatch }) {
     };
 
     console.log("request", payload);
+    // Load Testcase
+    if(payload.task.sheetId) {
+      dispatch("testCase/getTestCase", payload.task.sheetId, { root: true });
+    }
+
+    // Check if last task in not finished to process
     if (payload.task.status !== "finished") {
       dispatch("tcp/tcpClientWrite", payload, { root: true });
     }

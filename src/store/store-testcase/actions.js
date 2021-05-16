@@ -1,8 +1,7 @@
 import { firebaseRealTimeDB } from "boot/firebase";
 
-export function getTestCase({ commit, state }, payload) {
-  const testCaseNode = `/${payload.sheet}/TestCases`;
-
+export function getTestCase({ commit, state }, sheetId) {
+  const testCaseNode = sheetId;
   if (state.testCaseNode && state.testCaseNode === testCaseNode) {
     return;
   }
