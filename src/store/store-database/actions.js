@@ -1,4 +1,5 @@
-import { firebaseRealTimeDB } from "boot/firebase";
+import { firebaseRealTimeDB, storageBucket } from "boot/firebase";
+
 const userTask = firebaseRealTimeDB
   .ref(`bench/CHE7-L26526`)
   .orderByChild("date")
@@ -24,3 +25,4 @@ export function updateTest({}, payload) {
   const updateDB = firebaseRealTimeDB.ref(`bench/CHE7-L26526/${payload.id}`);
   updateDB.update(payload.updates);
 }
+

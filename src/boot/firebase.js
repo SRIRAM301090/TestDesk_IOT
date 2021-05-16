@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
-
 import "firebase/auth";
 import "firebase/database";
+import "firebase/storage"
 
 var firebaseConfig = {
   apiKey: "AIzaSyBjsMIxu3qUW71kVdhiO4m1Q5YAel0P1sI",
@@ -19,5 +19,6 @@ const authProvider = new firebase.auth.GoogleAuthProvider();
 const firebaseRealTimeDB = firebaseApp.database(
   "https://testdesk-baa4e-default-rtdb.asia-southeast1.firebasedatabase.app/"
 );
+const storageBucket = firebaseApp.storage();
 
-export { firebaseAuth, authProvider, firebaseRealTimeDB };
+export { firebaseAuth, authProvider, firebaseRealTimeDB, storageBucket };
