@@ -13,12 +13,10 @@ export function getCommand({ dispatch }) {
       task: task
     };
 
-    console.log("request", payload);
 
     // Check if last task in not finished to process
     if (payload.task.status !== "finished") {
       if (payload.task.sheetId) {
-        console.log("start");
         // Load Testcase
         dispatch("testCase/getTestCase", payload.task.sheetId, {
           root: true
@@ -35,7 +33,12 @@ export function getCommand({ dispatch }) {
 }
 
 export function updateTest({}, payload) {
-  console.log(JSON.stringify(payload));
   const updateDB = firebaseRealTimeDB.ref(`bench/CHE7-L26526/${payload.id}`);
   updateDB.update(payload.updates);
+}
+
+export function addTestResult({}, payload) {
+  const key = Object.keys(payload.result)[0];
+  const addToDB = firebaseRealTimeDB.ref(`bench/CHE7-L26526/${payload.id}/result/${key}`);
+  addToDB.set(payload.result[key]);
 }

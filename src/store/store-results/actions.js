@@ -21,7 +21,6 @@ const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
 };
 
 export async function uploadFile({ dispatch }, payload) {
-  console.log(payload);
   const results = JSON.parse(payload.updates.status);
   results.id = payload.id;
   results.user = payload.user;
@@ -31,7 +30,6 @@ export async function uploadFile({ dispatch }, payload) {
 
   let mainData = payload;
   mainData.updates.status = {};
-  console.log(mainData);
 
   const reportName = results.report;
   const fs = require("fs").promises;
@@ -55,24 +53,23 @@ export async function uploadFile({ dispatch }, payload) {
 }
 
 export function addResult({ dispatch }, payload) {
-  console.log("result added", payload);
   firebaseFireStore.collection("reports").add(payload.results);
 
   const results = payload.results;
-  const saveToDb = {};
+  const updateDb = {};
+  const updates = {};
 
-  if (results.last) {
-    saveToDb.id = results.id;
+  const testResult = {};
+  testResult.id = results.id;
+  testResult.result = {};
+  Object.assign(testResult.result, {
+    [results.testId]: { url: results.url, status: results.status }
+  });
 
-    const updates = {};
-    updates.url = results.url;
-    updates.status = results.last ? "finished" : "progress";
-    updates.result = {};
-    Object.assign(updates.result, {
-      [results.testId]: { url: results.url, status: results.status }
-    });
-    saveToDb.updates = updates;
-    console.log(saveToDb);
-    dispatch("database/updateTest", saveToDb, { root: true });
-  }
+  dispatch("database/addTestResult", testResult, { root: true });
+
+  updateDb.id = results.id;
+  updates.status = results.last ? "finished" : "progress";
+  updateDb.updates = updates;
+  dispatch("database/updateTest", updateDb, { root: true });
 }
