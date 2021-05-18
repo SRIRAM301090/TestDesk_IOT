@@ -1,5 +1,4 @@
 import { storageBucket, firebaseFireStore } from "boot/firebase";
-import { uid } from "quasar";
 
 const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
   const byteCharacters = atob(b64Data);
@@ -22,13 +21,18 @@ const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
 };
 
 export async function uploadFile({ dispatch }, payload) {
-  let mainData = payload;
-  mainData.updates.status = {}
-  
+  console.log(payload);
   const results = JSON.parse(payload.updates.status);
   results.id = payload.id;
+  results.user = payload.user;
   results.time = Date.now();
-  
+  results.project = payload.project;
+  results.variant = payload.variant;
+
+  let mainData = payload;
+  mainData.updates.status = {};
+  console.log(mainData);
+
   const reportName = results.report;
   const fs = require("fs").promises;
   const b64Data = await fs.readFile(
@@ -52,12 +56,23 @@ export async function uploadFile({ dispatch }, payload) {
 
 export function addResult({ dispatch }, payload) {
   console.log("result added", payload);
-  // firebaseFireStore.collection("reports").add({ payload });
-  // if (payload.last) {
-  //   const updates = {};
-  //   updates.id = payload.id;
-  //   updates.url = payload.url;
-  //   updates.status = "finished";
-  //   dispatch("database/updateTest", updates, { root: true });
-  // }
+  firebaseFireStore.collection("reports").add(payload.results);
+
+  const results = payload.results;
+  const saveToDb = {};
+
+  if (results.last) {
+    saveToDb.id = results.id;
+
+    const updates = {};
+    updates.url = results.url;
+    updates.status = results.last ? "finished" : "progress";
+    updates.result = {};
+    Object.assign(updates.result, {
+      [results.testId]: { url: results.url, status: results.status }
+    });
+    saveToDb.updates = updates;
+    console.log(saveToDb);
+    dispatch("database/updateTest", saveToDb, { root: true });
+  }
 }

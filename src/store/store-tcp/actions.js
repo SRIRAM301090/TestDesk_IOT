@@ -44,6 +44,7 @@ export function createServer({ dispatch }) {
       // run this when data is received
       const payload = JSON.parse(data.toString().trim());
       console.log(payload);
+      
       if (payload.command === "self-test") {
         dispatch("database/updateTest", payload, { root: true });
       } else if (payload.command === "start-test") {
