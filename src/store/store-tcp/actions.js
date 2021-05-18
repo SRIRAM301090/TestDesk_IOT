@@ -21,7 +21,6 @@ export function tcpClientWrite({ rootGetters }, payload) {
   // send data to TestBench server
   payload.task.testcase =
     ("root getter", rootGetters["testCase/testProcedures"]);
-  console.log(payload);
 
   const request = JSON.stringify(payload);
   buf.write(request.length.toString().trim(), 0, "utf8");
