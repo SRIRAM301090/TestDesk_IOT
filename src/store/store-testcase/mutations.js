@@ -1,4 +1,5 @@
 import Vue from "vue";
+import state from "../store-auth/state";
 
 export function addTestCase(state, payload) {
   Vue.set(state.testCases, payload.id, payload.test);
@@ -20,3 +21,6 @@ export function setTestCaseNode(state, node) {
   state.testCaseNode = node;
 }
 
+export function userTest(state, test) {
+  state.test = test;
+}

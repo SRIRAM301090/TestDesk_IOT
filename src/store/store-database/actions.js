@@ -1,4 +1,4 @@
-import { firebaseRealTimeDB} from "boot/firebase";
+import { firebaseRealTimeDB } from "boot/firebase";
 
 const userTask = firebaseRealTimeDB
   .ref(`bench/CHE7-L26526`)
@@ -14,14 +14,22 @@ export function getCommand({ dispatch }) {
     };
 
     console.log("request", payload);
-    // Load Testcase
-    if(payload.task.sheetId) {
-      dispatch("testCase/getTestCase", payload.task.sheetId, { root: true });
-    }
 
     // Check if last task in not finished to process
     if (payload.task.status !== "finished") {
-      dispatch("tcp/tcpClientWrite", payload, { root: true });
+      if (payload.task.sheetId) {
+        console.log("start");
+        // Load Testcase
+        dispatch("testCase/getTestCase", payload.task.sheetId, {
+          root: true
+        }).then(() => {
+          dispatch("testCase/getTests", payload.task.test, { root: true }).then(
+            () => {
+              dispatch("tcp/tcpClientWrite", payload, { root: true });
+            }
+          );
+        });
+      }
     }
   });
 }
@@ -31,4 +39,3 @@ export function updateTest({}, payload) {
   const updateDB = firebaseRealTimeDB.ref(`bench/CHE7-L26526/${payload.id}`);
   updateDB.update(payload.updates);
 }
-
