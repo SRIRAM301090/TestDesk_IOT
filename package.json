@@ -6,7 +6,8 @@
   "author": "Sriram GOPALAN",
   "private": true,
   "scripts": {
-    "icons": "icongenie generate -i src/assets/AppIcon.png --skip-trim"
+    "icons": "icongenie generate -i src/assets/AppIcon.png --skip-trim",
+    "deploy": "quasar build -m electron"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
