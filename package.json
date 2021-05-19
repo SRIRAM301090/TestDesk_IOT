@@ -6,8 +6,7 @@
   "author": "Sriram GOPALAN",
   "private": true,
   "scripts": {
-    "lint": "eslint --ext .js,.vue ./",
-    "test": "echo \"No test specified\" && exit 0"
+    "icons": "icongenie generate -i src/assets/AppIcon.png --skip-trim"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
