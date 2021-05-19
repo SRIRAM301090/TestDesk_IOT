@@ -1,42 +1,11 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="row">
-      <div class="col">
-        <p>TCP Client Status: {{ tcpClientStatus }}</p>
-      </div>
+    <div class="row q-mt-xl q-pl-xl">
       <div class="col">
         <q-btn
-          color="primary"
-          class="q-mr-sm"
-          icon="check"
-          label="Reconnect"
-          @click="tcpClientOpen"
-        />
-        <q-btn
-          color="primary"
-          class="q-mr-sm"
-          icon="check"
-          label="Send"
-          @click="tcpClientWrite(Date.now())"
-        />
-        <q-btn
-          color="primary"
-          class="q-mr-sm"
-          icon="check"
-          label="Close"
-          @click="tcpClientClose"
-        />
-        <q-file outlined v-model="model">
-          <template v-slot:prepend>
-            <q-icon name="attach_file" />
-          </template>
-        </q-file>
-        <q-btn
-          color="primary"
-          class="q-mr-sm"
-          icon="check"
-          label="Upload"
-          @click="uploadFile"
+          :color="tcpClientStatus ? 'positive' : 'negative'"
+          text-color="white"
+          label="TCP Connection"
         />
       </div>
     </div>
@@ -45,7 +14,6 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-
 
 export default {
   name: "PageIndex",
@@ -61,8 +29,7 @@ export default {
       "tcpClientClose",
       "createServer"
     ]),
-    ...mapActions("database", ["getCommand", "upload"]),
-    ...mapActions("results", ["uploadFile"])
+    ...mapActions("database", ["getCommand"])
   },
   computed: {
     ...mapGetters("tcp", ["tcpClientStatus"])

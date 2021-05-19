@@ -13,7 +13,6 @@ export function getCommand({ dispatch }) {
       task: task
     };
 
-
     // Check if last task in not finished to process
     if (payload.task.status !== "finished") {
       if (payload.task.sheetId) {
