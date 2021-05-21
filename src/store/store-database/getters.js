@@ -1,2 +1,3 @@
-export function someGetter (/* state */) {
+export function getTestBench(state) {
+  return state.testBench;
 }

@@ -1,11 +1,14 @@
 import { firebaseRealTimeDB } from "boot/firebase";
 
-const userTask = firebaseRealTimeDB
-  .ref(`bench/CHE7-L26526`)
-  .orderByChild("date")
-  .limitToLast(1);
+export function getCommand({ commit, dispatch }, testBench) {
 
-export function getCommand({ dispatch }) {
+  commit("setTestBench", testBench);
+
+  const userTask = firebaseRealTimeDB
+    .ref(`bench/${testBench}`)
+    .orderByChild("date")
+    .limitToLast(1);
+
   userTask.on("child_added", snapshot => {
     const task = snapshot.val();
     const payload = {
@@ -31,13 +34,17 @@ export function getCommand({ dispatch }) {
   });
 }
 
-export function updateTest({}, payload) {
-  const updateDB = firebaseRealTimeDB.ref(`bench/CHE7-L26526/${payload.id}`);
+export function updateTest({state}, payload) {
+  const testBench = state.testBench;
+  const updateDB = firebaseRealTimeDB.ref(`bench/${testBench}/${payload.id}`);
   updateDB.update(payload.updates);
 }
 
-export function addTestResult({}, payload) {
+export function addTestResult({state}, payload) {
+  const testBench = state.testBench;
   const key = Object.keys(payload.result)[0];
-  const addToDB = firebaseRealTimeDB.ref(`bench/CHE7-L26526/${payload.id}/result/${key}`);
+  const addToDB = firebaseRealTimeDB.ref(
+    `bench/${testBench}/${payload.id}/result/${key}`
+  );
   addToDB.set(payload.result[key]);
 }
