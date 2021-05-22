@@ -19,9 +19,7 @@ export function tcpClientOpen({ commit, dispatch }) {
 
 export function tcpClientWrite({ rootGetters }, payload) {
   // send data to TestBench server
-  payload.task.testcase =
-    ("root getter", rootGetters["testCase/testProcedures"]);
-
+  payload.task.testcase = rootGetters["testCase/testProcedures"];
   const request = JSON.stringify(payload);
   buf.write(request.length.toString().trim(), 0, "utf8");
   client.write(buf);
@@ -42,7 +40,7 @@ export function createServer({ dispatch }) {
     connection.on("data", data => {
       // run this when data is received
       const payload = JSON.parse(data.toString().trim());
-      
+
       if (payload.command === "self-test") {
         dispatch("database/updateTest", payload, { root: true });
       } else if (payload.command === "start-test") {

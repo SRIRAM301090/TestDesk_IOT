@@ -7,7 +7,10 @@ export function testProcedures(state) {
 
     for (const test in testCases) {
       if (userTests.includes(test)) {
-        testProcedure.push(testCases[test]["TestProcedure"]);
+        testProcedure.push({
+          testID: test,
+          testProcedure: testCases[test]["TestProcedure"]
+        });
       }
     }
     return testProcedure;
