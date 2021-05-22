@@ -63,7 +63,11 @@ export function addResult({ dispatch }, payload) {
   testResult.id = results.id;
   testResult.result = {};
   Object.assign(testResult.result, {
-    [results.testId]: { url: results.url, status: results.status }
+    [results.testId]: {
+      url: results.url,
+      status: results.status,
+      date: Date.now()
+    }
   });
 
   dispatch("database/addTestResult", testResult, { root: true });
