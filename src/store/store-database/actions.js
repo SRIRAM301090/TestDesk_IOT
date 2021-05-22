@@ -1,7 +1,6 @@
 import { firebaseRealTimeDB } from "boot/firebase";
 
 export function getCommand({ commit, dispatch }, testBench) {
-
   commit("setTestBench", testBench);
 
   const userTask = firebaseRealTimeDB
@@ -18,7 +17,13 @@ export function getCommand({ commit, dispatch }, testBench) {
 
     // Check if last task in not finished to process
     if (payload.task.status !== "finished") {
-      if (payload.task.sheetId) {
+      // Self Test
+      if (payload.task.command === "self-test") {
+        dispatch("tcp/tcpClientWrite", payload, { root: true });
+      } else if (
+        payload.task.command === "start-test" &&
+        payload.task.sheetId
+      ) {
         // Load Testcase
         dispatch("testCase/getTestCase", payload.task.sheetId, {
           root: true
@@ -34,13 +39,13 @@ export function getCommand({ commit, dispatch }, testBench) {
   });
 }
 
-export function updateTest({state}, payload) {
+export function updateTest({ state }, payload) {
   const testBench = state.testBench;
   const updateDB = firebaseRealTimeDB.ref(`bench/${testBench}/${payload.id}`);
   updateDB.update(payload.updates);
 }
 
-export function addTestResult({state}, payload) {
+export function addTestResult({ state }, payload) {
   const testBench = state.testBench;
   const key = Object.keys(payload.result)[0];
   const addToDB = firebaseRealTimeDB.ref(
